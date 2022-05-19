@@ -1,0 +1,13 @@
+<h2>Shop</h2>
+<div>
+    This is the shopping page
+</div>
+<ul class="store">
+  <li *ngFor="let product of products">
+    <a routerLink="/shop/{{product.id}}">
+      <span class="badge">{{product.id}}</span> {{product.name}}
+    </a>
+    <button type="button" class="delete" title="delete product"
+      (click)="delete(product)">x</button>
+  </li>
+</ul>

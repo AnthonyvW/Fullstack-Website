@@ -1,0 +1,10 @@
+<div *ngIf="product">
+    <button type="button" (click)="goBack()">go back</button>
+    <div>
+        {{product.description}}
+    </div>
+    <h2>{{product.name}}</h2>
+    <div>
+        ${{product.price}}
+    </div>
+</div>
