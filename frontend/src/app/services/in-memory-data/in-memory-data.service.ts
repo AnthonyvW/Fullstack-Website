@@ -12,8 +12,10 @@ export class InMemoryDataService implements InMemoryDbService {
       {id: 2, name: 'Slippery Boots', price: 19.99, description: "This is a pair of slippery boots."},
       {id: 3, name: 'Conductive Gloves', price: 19.99, description: "This is a pair of conductive gloves."},
       {id: 4, name: 'Open Toed Shoes', price: 10.00, description: "This is a pair of open toed shoes."}
-  ];
-    return {products};
+    ];
+    const isAdmin: boolean[] = [false];
+
+    return {isAdmin, products};
   }
 
   // Overrides the genId method to ensure that a product always has an id.
