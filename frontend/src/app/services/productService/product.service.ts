@@ -37,7 +37,12 @@ export class ProductService {
     );
     }
 
-    //addProduct(name: string, price: number, description: string): Observable<
+    addProduct(product: Product): Observable<Product>{
+      return this.http.post<Product>(this.productsUrl, product, this.httpOptions).pipe(
+        tap((newProduct: Product) => this.log(`Added Product w/ id=${newProduct.id}`)),
+        catchError(this.handleError<Product>('addProduct'))
+      );
+    }
 
     deleteProduct(id: number): Observable<Product> {
       const url = `${this.productsUrl}/${id}`;

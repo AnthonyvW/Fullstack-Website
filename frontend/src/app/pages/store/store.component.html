@@ -10,9 +10,25 @@
 <h2>Shop</h2>
 <div>
   This is the shopping page
+</div>
+<h4>
+  Add New Product
+</h4>
+<div hidden = true>
   {{getAdminState()}}
 </div>
-
+<div [hidden] = "isAdmin">
+  <label for="new-product">Product Name: </label>
+  <input id="new-product" #productName />
+  <label for="new-product" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$2').replace(/^0[^.]/, '0');">Product Price: </label>
+  <input id="new-product" #productPrice />
+  <label for="new-product">Product Description: </label>
+  <input id="new-product" #productDescription />
+  <!--I got the below regex from this link https://stackoverflow.com/a/28838789/18194637 -->
+  <button type="button" class="add-button" (click)="add(productName.value, productPrice.value, productDescription.value);">
+    Add Product
+  </button>
+</div>
 
 
 <ul class="store">

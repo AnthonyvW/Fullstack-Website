@@ -40,5 +40,13 @@ export class StoreComponent implements OnInit{
     this.productService.deleteProduct(product.id).subscribe();
   }
 
+  add(name: string, cost: string, description: string): void{
+    name = name.trim();
+    let price: number = +cost;
+    let id:number = 0; // TODO replace with real id
+    if (!name || !price) {return;}
+    this.productService.addProduct({ id, name, price, description } as Product).subscribe(product => {this.products.push(product)});
+  }
+
   
 }
