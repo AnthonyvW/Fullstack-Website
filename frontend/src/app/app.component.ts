@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { AdminService } from './services/adminService/admin.service';
-import { Bool } from './product';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +9,6 @@ import { Bool } from './product';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  isAdmin: boolean = false;
   
   title = 'OSHA Uncertified';
 
@@ -23,18 +21,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAdminState();
   }
 
-  getAdminState(): void{
-    this.adminService.getAdminState()
-    .subscribe(isAdmin => this.isAdmin = isAdmin[0]);
+  getAdminState(): boolean{
+    return this.adminService.isAdmin;
+    //this.adminService.getAdminState().subscribe(isAdmin => this.isAdmin = isAdmin[0]);
   }
-  goBack(): void{
-    console.log(this.isAdmin)
-  }
+  
   toggleAdminState(): void {
-    this.isAdmin = !this.isAdmin;
-    this.adminService.adminToggle([!this.isAdmin]).subscribe(() => this.goBack());
+    this.adminService.adminToggle();
+    //this.isAdmin = !this.isAdmin;
+    //this.adminService.adminToggle([!this.isAdmin]).subscribe(() => this.goBack());
+  }
+
+  goBack(): void{
+    //console.log(this.isAdmin)
   }
 }

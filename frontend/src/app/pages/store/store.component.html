@@ -1,13 +1,28 @@
+<script type="text/javascript">
+  function hideElement(value, id) {
+      if(value)
+        document.getElementById(id).style.visibility = "hidden";
+      else
+        document.getElementById(id).style.visibility = "visible";
+  }
+</script>
+
 <h2>Shop</h2>
 <div>
-    This is the shopping page
+  This is the shopping page
+  {{getAdminState()}}
 </div>
+
+
+
 <ul class="store">
   <li *ngFor="let product of products">
     <a routerLink="/shop/{{product.id}}">
       <span class="badge">{{product.id}}</span> {{product.name}}
     </a>
-    <button type="button" class="delete" title="delete product"
-      (click)="delete(product)">x</button>
+
+    <button id="delButton" type="button" class="delete" title="delete product"
+      (click)="delete(product)" [hidden] = "isAdmin">x</button>
+
   </li>
 </ul>
