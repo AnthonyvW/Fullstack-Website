@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, of, switchMap, tap } from 'rxjs'
+import { UserService } from 'src/app/services/DBProductService/DBProduct.service';
 
 
 import { Product } from 'src/app/product';
@@ -14,7 +16,13 @@ export class StoreComponent implements OnInit{
   products: Product[] = [];
   isAdmin: boolean = this.getAdminState();
   
-  constructor(private productService: ProductService, private adminService: AdminService) { }
+  constructor(
+    private productService: ProductService, 
+    private adminService: AdminService,
+    private userService: UserService) { 
+
+    
+  }
   
   ngOnInit(): void {
     this.getProducts();
@@ -31,21 +39,23 @@ export class StoreComponent implements OnInit{
   }
 
   getProducts(): void{
-    this.productService.getProducts()
-    .subscribe(products => this.products = products);
+    this.userService.getProducts().subscribe(products => this.products = products);
   }
 
   delete(product: Product): void {
     this.products = this.products.filter(h => h !== product);
-    this.productService.deleteProduct(product.id).subscribe();
+    
+    this.userService.deleteProduct(product).subscribe();
   }
 
   add(name: string, cost: string, description: string): void{
     name = name.trim();
     let price: number = +cost;
-    let id:number = 0; // TODO replace with real id
+    let id:number = 0;
+    console.log(name, price, description)
     if (!name || !price) {return;}
-    this.productService.addProduct({ id, name, price, description } as Product).subscribe(product => {this.products.push(product)});
+    this.userService.addProduct({ id, name, price, description } as Product).subscribe(product => {this.products.push(product)});
+    
   }
 
   

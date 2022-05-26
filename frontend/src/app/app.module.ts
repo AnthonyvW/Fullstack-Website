@@ -24,9 +24,9 @@ import { ProductComponent } from './pages/product/product.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    )
+    //HttpClientInMemoryWebApiModule.forRoot(
+    //  InMemoryDataService, { dataEncapsulation: false }
+    //)
   ],
   providers: [Title],
   bootstrap: [AppComponent]

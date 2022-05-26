@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   public constructor(private titleService: Title, private adminService: AdminService) { 
     this.setTitle(this.title)
   }
+
   // Sets the title of the page
   public setTitle(newTitle: string) {
     this.titleService.setTitle(newTitle);

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { catchError, of, switchMap, tap } from 'rxjs'
+import { UserService } from 'src/app/services/DBProductService/DBProduct.service';
 
 import { Product } from 'src/app/product';
 import { ProductService } from 'src/app/services/productService/product.service';
@@ -17,8 +19,9 @@ export class ProductComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private location: Location
-  ) {}
+    private location: Location,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.getProduct();
@@ -26,7 +29,7 @@ export class ProductComponent implements OnInit {
 
   getProduct(): void{
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.productService.getProduct(id)
+    this.userService.getProduct(id)
       .subscribe(product => this.product = product);
   }
 
