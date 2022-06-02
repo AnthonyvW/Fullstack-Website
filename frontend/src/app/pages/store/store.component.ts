@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { catchError, of, switchMap, tap } from 'rxjs'
 import { UserService } from 'src/app/services/DBProductService/DBProduct.service';
-
+import { catchError, of, switchMap, tap } from 'rxjs'
 
 import { Product } from 'src/app/product';
 import { ProductService } from 'src/app/services/productService/product.service';
@@ -19,10 +18,8 @@ export class StoreComponent implements OnInit{
   constructor(
     private productService: ProductService, 
     private adminService: AdminService,
-    private userService: UserService) { 
-
-    
-  }
+    private userService: UserService
+  ) {   }
   
   ngOnInit(): void {
     this.getProducts();
@@ -39,7 +36,10 @@ export class StoreComponent implements OnInit{
   }
 
   getProducts(): void{
-    this.userService.getProducts().subscribe(products => this.products = products);
+    this.userService.getProducts().subscribe(products => {
+      this.products = products
+      console.log(this.products)
+    });
   }
 
   delete(product: Product): void {
@@ -48,13 +48,14 @@ export class StoreComponent implements OnInit{
     this.userService.deleteProduct(product).subscribe();
   }
 
-  add(name: string, cost: string, description: string): void{
-    name = name.trim();
+  add(product_name: string, cost: string, product_description: string): void{
+    product_name = product_name.trim();
     let price: number = +cost;
     let id:number = 0;
-    console.log(name, price, description)
-    if (!name || !price) {return;}
-    this.userService.addProduct({ id, name, price, description } as Product).subscribe(product => {this.products.push(product)});
+    console.log(product_name, price, product_description)
+    if (!product_name || !price) {return;}
+    this.userService.addProduct({ id, product_name, price, product_description } as Product)
+    .subscribe(product => {this.products.push(product)});
     
   }
 

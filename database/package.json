@@ -1,10 +1,13 @@
 {
-  "name": "database",
+  "name": "kartoriuminterndb",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tables": "psql -U postgres -d kartoriuminterndb -f ./scripts/DB_Create_Tables.sql",
+    "functions": "psql -U postgres -d kartoriuminterndb -f ./scripts/Create_Functions.sql",
+    "data": "psql -U postgres -d kartoriuminterndb -f ./scripts/create_mock_data.sql"
   },
   "keywords": [],
   "author": "",

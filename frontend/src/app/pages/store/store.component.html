@@ -34,7 +34,7 @@
 <ul class="store">
   <li *ngFor="let product of products">
     <a routerLink="/shop/{{product.id}}">
-      <span class="badge">{{product.id}}</span> {{product.name}}
+      <span class="badge">{{product.id}}</span> {{product.product_name}}
     </a>
 
     <button id="delButton" type="button" class="delete" title="delete product"

@@ -5,17 +5,27 @@ import { Product } from 'src/app/product'
 const options = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 }
+interface User {
+  first_name: string;
+  last_name: string;
+  email: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
 
   constructor(private _http: HttpClient) {   }
 
+  getUsers(){
+    const url = `http://localhost:3000/users/`
+    return this._http.get<User[]>(url, options)
+  }
+
   addProduct(product: Product){
     const url = `http://localhost:3000/shop/`
-
     return this._http.post<Product>(url, product, options)
   }
 
