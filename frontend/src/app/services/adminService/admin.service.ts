@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 export class AdminService {
 
   private adminUrl = 'api/isAdmin';
-  isAdmin: boolean = false;
+  isAdmin: boolean = true;
   isAdminChange: Subject<boolean> = new Subject<boolean>();
 
   constructor() { 

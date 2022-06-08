@@ -7,38 +7,95 @@
   }
 </script>
 
-<h2>Shop</h2>
-<div>
-  This is the shopping page
-</div>
-<h4>
-  Add New Product
-</h4>
+
+
 <div hidden = true>
   {{getAdminState()}}
 </div>
-<div [hidden] = "isAdmin">
-  <label for="new-product">Product Name: </label>
-  <input id="new-product" #productName />
-  <label for="new-product" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$2').replace(/^0[^.]/, '0');">Product Price: </label>
-  <input id="new-product" #productPrice />
-  <label for="new-product">Product Description: </label>
-  <input id="new-product" #productDescription />
-  <!--I got the below regex from this link https://stackoverflow.com/a/28838789/18194637 -->
-  <button type="button" class="add-button" (click)="add(productName.value, productPrice.value, productDescription.value);">
-    Add Product
-  </button>
+<main class="container">
+  
+<div class="p-4 p-md-4 mb-4 text-white rounded bg-dark">
+  <div class="col-md-6 px-0">
+    <h1 class="display-6 fst-italic">OSHA Uncertified Products</h1>
+    
+    <p class="lead my-3">Only the most essential ingredients to a hazardous workplace.</p>
+  </div>
 </div>
 
 
-<ul class="store">
-  <li *ngFor="let product of products">
-    <a routerLink="/shop/{{product.id}}">
-      <span class="badge">{{product.id}}</span> {{product.product_name}}
-    </a>
+<div class="col-md-7 col-lg-12 center" [hidden] = "isAdmin">
+  <form class="needs-validation" novalidate>
+    <h4 class="mb-3">Add New Product</h4>
+    <div class="row g-3">
+      <div class="col-sm-6">
+        <label for="productName" class="form-label">Product Name</label>
+        <input class="form-control" id="new-product" #productName placeholder="" value="" required>
+        <div class="invalid-feedback">
+          A Product Name is Required.
+        </div>
+      </div>
 
-    <button id="delButton" type="button" class="delete" title="delete product"
-      (click)="delete(product)" [hidden] = "isAdmin">x</button>
+      <div class="col-sm-3">
+        <label for="price" class="form-label" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$2').replace(/^0[^.]/, '0');">Price</label>
+        <input class="form-control" id="new-product" #productPrice placeholder="" value="" required>
+        <div class="invalid-feedback">
+          A Price is Required
+        </div>
+      </div>
 
-  </li>
-</ul>
+      <div class="col-sm-3">
+        <label for="stock" class="form-label">Current Stock</label>
+        <input class="form-control" id="new-product" #productStock placeholder="" value="" required>
+        <div class="invalid-feedback">
+          Stock is Required
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label for="username" class="form-label">Description</label>
+        <div class="input-group has-validation">
+          <input class="form-control" id="new-product" #productDescription placeholder="Description" required>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12"><button class="add-button w-100 btn btn-outline-secondary btn-lg" type="button" (click)="add(productName.value, productPrice.value, productDescription.value);">
+      Add Product
+    </button></div>
+    
+</form>
+</div>
+
+
+<div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <li *ngFor="let product of products">
+
+      <div class="col">
+        <div class="card shadow-sm">
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+          <div class="card-body">
+            <h5 class="card-title"> <b>{{product.product_name}}</b></h5>
+            <p class="card-text" [hidden]="showStock(product)"><strong>${{product.price}}</strong></p>
+            <p class="card-text" [hidden]="!showStock(product)"><strong>Product Unavailable</strong></p>
+            <a routerLink="/shop/{{product.id}}" class = "stretched-link"></a>
+            <button style="position: relative; z-index: 2;" type="button" class="btn btn-sm btn-outline-secondary " [hidden]="showStock(product)"(click)="addToCart(product)">Add to Shopping Cart</button>
+
+            <button style="position: relative; z-index: 2;" id="delButton" type="button "  class="delete btn btn-sm btn-outline-secondary" title="delete product"(click)="delete(product)" [hidden] = "isAdmin">Delete Product</button>
+            
+          </div>
+            
+          
+        </div>
+      </div>
+
+    </li>
+
+    </div>
+  </div>
+</div>
+</main>
+
+

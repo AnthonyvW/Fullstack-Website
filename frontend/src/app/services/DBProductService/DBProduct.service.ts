@@ -46,4 +46,9 @@ export class UserService {
 
     return this._http.get<Product[]>(url, options)
   }
+  changeStock(product: Product){
+    const url = `http://localhost:3000/cart/`
+    
+    return this._http.put<Product>(url, product, options)
+  }
 }

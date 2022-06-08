@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { AdminService } from './services/adminService/admin.service';
-
+import { ProductService } from './services/productService/product.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,7 +12,10 @@ export class AppComponent implements OnInit {
   
   title = 'OSHA Uncertified';
 
-  public constructor(private titleService: Title, private adminService: AdminService) { 
+  public constructor(
+    private titleService: Title,
+    private productService: ProductService,  
+    private adminService: AdminService) { 
     this.setTitle(this.title)
   }
 
@@ -26,16 +29,16 @@ export class AppComponent implements OnInit {
 
   getAdminState(): boolean{
     return this.adminService.isAdmin;
-    //this.adminService.getAdminState().subscribe(isAdmin => this.isAdmin = isAdmin[0]);
   }
   
   toggleAdminState(): void {
     this.adminService.adminToggle();
-    //this.isAdmin = !this.isAdmin;
-    //this.adminService.adminToggle([!this.isAdmin]).subscribe(() => this.goBack());
   }
 
   goBack(): void{
-    //console.log(this.isAdmin)
+  }
+  getCartSize(){
+    return this.productService.getCartSize()
+    
   }
 }

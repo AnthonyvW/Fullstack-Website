@@ -41,11 +41,14 @@ router.post('/shop', addProduct)
 router.delete('/shop/:id', deleteProduct)
 router.get('/shop/:id', getProduct)
 router.get('/shop', getProducts)
-//router.put('/shop/:id', updateProduct)
+router.put('/cart', changeStock)
 
 async function addProduct(request: Request, response: Response, next: NextFunction){
-  pool.query(`SELECT create_product($1, $2, $3);`, [request.body.product_name, request.body.product_description, request.body.price]).then(
-    query => response.status(201).json(query.rows[0])
+  pool.query(`SELECT * FROM create_product($1, $2, $3, $4);`, [request.body.product_name, request.body.product_description, request.body.price, request.body.stock]).then(
+    query => {
+      response.status(201).json(query.rows[0])
+    }
+    
   )
 }
 async function deleteProduct(request: Request, response: Response, next: NextFunction){
@@ -53,7 +56,14 @@ async function deleteProduct(request: Request, response: Response, next: NextFun
   pool.query('DELETE FROM products WHERE id = $1;', [product_ID]).then(
     query => response.status(200).json(query.rows[0])
   )
-
+}
+async function changeStock(request: Request, response: Response, next: NextFunction){
+  const product_ID = parseInt(request.body.id)
+  const stock = parseInt(request.body.stock)
+  console.log(stock)
+  pool.query('UPDATE products SET stock = stock - $1 WHERE id = $2', [stock,product_ID]).then(
+    query => response.status(200).json(query.rows[0])
+  )
 }
 async function getProduct(request: Request, response: Response, next: NextFunction){
   const product_ID = parseInt(request.params.id)

@@ -1,0 +1,23 @@
+<div hidden = true>
+    {{getCart()}}
+  </div>
+<main class="container">
+    <br>
+    <div>
+        <ul class="list-group" *ngFor="let product of cart">
+            <li class="list-group-item "><strong>${{getFixed(product.price * product.stock)}}</strong> {{product.product_name}}
+                <span class="badge rounded-pill bg-primary shopping_Badge">
+                    {{product.stock}}
+                </span>
+                <button style="position: relative; z-index: 2;float:right;" id="delButton" type="button "  class="delete btn btn-sm btn-outline-secondary" title="delete product"(click)="deleteItem(product.id)">Delete Product</button>
+                <button style="position: relative; z-index: 2;float:right;" id="delButton" type="button "  class="delete btn btn-sm btn-outline-secondary" title="delete product"(click)="modItem(product, -1)"><strong>-</strong></button>
+                <button style="position: relative; z-index: 2;float:right;" id="delButton" type="button "  class="delete btn btn-sm btn-outline-secondary" title="delete product"(click)="addToCart(product)"><strong>+</strong></button>
+
+            </li>
+            
+        </ul>
+        <h5>Total ${{getFixed(getTotalSum())}}</h5>
+        <button style="position: relative; z-index: 2;" id="delButton" type="button "  class="delete btn btn-sm btn-outline-secondary" title="delete product"(click)="clearCart()"><strong>Check Out</strong></button>
+
+    </div>
+</main>

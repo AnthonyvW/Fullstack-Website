@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/DBProductService/DBProduct.service';
-import { catchError, of, switchMap, tap } from 'rxjs'
 
 import { Product } from 'src/app/product';
 import { ProductService } from 'src/app/services/productService/product.service';
 import { AdminService } from 'src/app/services/adminService/admin.service';
+
 
 @Component({
   selector: 'app-store',
@@ -14,7 +14,7 @@ import { AdminService } from 'src/app/services/adminService/admin.service';
 export class StoreComponent implements OnInit{
   products: Product[] = [];
   isAdmin: boolean = this.getAdminState();
-  
+
   constructor(
     private productService: ProductService, 
     private adminService: AdminService,
@@ -24,7 +24,7 @@ export class StoreComponent implements OnInit{
   ngOnInit(): void {
     this.getProducts();
   }
-  
+
   getAdminState(): boolean{
     this.isAdmin = this.adminService.isAdmin;
     return this.isAdmin;
@@ -38,7 +38,6 @@ export class StoreComponent implements OnInit{
   getProducts(): void{
     this.userService.getProducts().subscribe(products => {
       this.products = products
-      console.log(this.products)
     });
   }
 
@@ -52,11 +51,22 @@ export class StoreComponent implements OnInit{
     product_name = product_name.trim();
     let price: number = +cost;
     let id:number = 0;
-    console.log(product_name, price, product_description)
     if (!product_name || !price) {return;}
-    this.userService.addProduct({ id, product_name, price, product_description } as Product)
-    .subscribe(product => {this.products.push(product)});
     
+    this.userService.addProduct({ id, product_name, price, product_description } as Product)
+    .subscribe(product => {
+      this.products.push(product)
+    });
+    
+  }
+
+  showStock(value: Product){
+    if(value.stock <= 0) return true
+    return false
+  }
+
+  addToCart(value: Product): void{
+    this.productService.addToCart(value);
   }
 
   

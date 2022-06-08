@@ -26,25 +26,24 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
     this.getProduct();
   }
-  handleUsers(user:any[]){
-    this.temp = user
-    console.log(this.temp)
-  }
- 
-  getUsers():void{
-    this.userService.getUsers().subscribe(this.handleUsers);
-  }
 
   getProduct(): void{
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
     this.userService.getProduct(id)
       .subscribe(product => {
         this.product = product
-        console.log(this.product)
       });
   }
 
   goBack(): void {
     this.location.back();
+  }
+  
+  showStock(value: Product){
+    if(value.stock <= 0) return true
+    return false
+  }
+  addToCart(value: Product): void{
+    this.productService.addToCart(value);
   }
 }

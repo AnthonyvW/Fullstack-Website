@@ -1,75 +1,100 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Injectable,OnInit } from '@angular/core';
 
+import { Subject } from 'rxjs';
 import { Product } from 'src/app/product';
-import { MessageService } from '../message/message.service';
+import { UserService } from '../DBProductService/DBProduct.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   
-  private productsUrl = 'api/products';
+  cart: Product[] = [];
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
-  constructor(
-    private http: HttpClient,
-    private messageService: MessageService) { }
-
-    getProducts(): Observable<Product[]> {
-      return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        tap(_ => this.log('fetched products')),
-        catchError(this.handleError<Product[]>('getProducts', []))
-      );
+  constructor(private userService: UserService) { 
+  }
+    ngOnInit(){
+      let temp = (localStorage.getItem("cart") || '').toString()
+      if(temp !== ''){
+        this.cart = JSON.parse(temp)
+      }
     }
 
-    getProduct(id: number): Observable<Product>{
-      const url = `${this.productsUrl}/${id}`;
-    return this.http.get<Product>(url).pipe(
-      tap(_ => this.log(`fetched product id=${id}`)),
-      catchError(this.handleError<Product>(`getProduct id=${id}`))
-    );
+    addToCart(product: Product){
+      let bool = false
+      let stock = 0
+      console.log(product)
+      this.cart.filter(function(obj){
+        console.log(obj)
+        if((obj.id == product.id) && (+(obj.stock) < +(product.stock))){
+          bool = true
+          obj.stock = (+(obj.stock)) + 1
+          stock = obj.stock
+          return obj
+        }else if(obj.id == product.id){
+          bool = true
+        }
+        return obj
+      })
+      if(!bool){
+        let copy = Object.assign({}, product)
+        copy.stock = 1
+        stock = 1
+        this.cart.push(copy)
+      }
+      localStorage.setItem("cart", JSON.stringify(this.cart));
+      return stock;
     }
 
-    addProduct(product: Product): Observable<Product>{
-      return this.http.post<Product>(this.productsUrl, product, this.httpOptions).pipe(
-        tap((newProduct: Product) => this.log(`Added Product w/ id=${newProduct.id}`)),
-        catchError(this.handleError<Product>('addProduct'))
-      );
+    modifyCart(id:number, value:number){
+      this.cart.map(val=>{
+        if(val.id == id){
+          if(val.stock + value >= 0)
+          val.stock += value
+        }
+      })
+      this.cart = this.cart.filter(function(obj){
+        return obj.stock > 0;
+      })
+    localStorage.setItem("cart", JSON.stringify(this.cart));
     }
 
-    deleteProduct(id: number): Observable<Product> {
-      const url = `${this.productsUrl}/${id}`;
+    deleteProductFromCart(id: number) {
+      this.cart = this.cart.filter(function( obj ) {
+        if (obj.id == id && obj.stock > 1){
+          obj.stock -= 1
+          return obj
+        } 
+        return obj.id !== id;
+    })
+    localStorage.setItem("cart", JSON.stringify(this.cart));
+    }
   
-      return this.http.delete<Product>(url, this.httpOptions).pipe(
-        tap(_ => this.log(`deleted product id=${id}`)),
-        catchError(this.handleError<Product>('deleteProduct'))
-      );
+    getCart() {
+      let temp = (localStorage.getItem("cart") || '').toString()
+      if(temp !== ''){
+        this.cart = JSON.parse(temp)
+      }
+      return this.cart
+    }
+    getCartSize() {
+      let temp = (localStorage.getItem("cart") || '').toString()
+      if(temp !== ''){
+        this.cart = JSON.parse(temp)
+      }
+      let cartsize=0;
+      this.cart.forEach(obj=>{
+        cartsize += obj.stock
+      })
+      return cartsize
+    }
+    clearCart(){
+      this.cart.forEach(obj=>{
+        this.userService.changeStock(obj).subscribe(result=>{console.log(result)})
+      })
+      this.cart = []
+      localStorage.setItem("cart", JSON.stringify(this.cart));
     }
 
 
-
-    private log(message: string) {
-      this.messageService.add(`ProductService: ${message}`);
-    }
-
-    private handleError<T>(operation = 'operation', result?: T) {
-      return (error: any): Observable<T> => {
-    
-        // TODO: send the error to remote logging infrastructure
-        console.error(error); // log to console instead
-    
-        // TODO: better job of transforming error for user consumption
-        this.log(`${operation} failed: ${error.message}`);
-    
-        // Let the app keep running by returning an empty result.
-        return of(result as T);
-      };
-    }
 }
