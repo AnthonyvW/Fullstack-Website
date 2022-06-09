@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core'
 import { Product } from 'src/app/product'
 
 const options = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 
+    'Content-Type': 'application/json'})
 }
 interface User {
   first_name: string;
@@ -16,7 +17,6 @@ interface User {
 })
 
 export class UserService {
-
   constructor(private _http: HttpClient) {   }
 
   getUsers(){

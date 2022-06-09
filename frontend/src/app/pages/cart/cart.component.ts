@@ -40,6 +40,5 @@ export class CartComponent implements OnInit {
     })
     return sum
   }
-
   getFixed(value: number){return value.toFixed(2)}
 }

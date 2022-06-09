@@ -46,4 +46,7 @@ export class ProductComponent implements OnInit {
   addToCart(value: Product): void{
     this.productService.addToCart(value);
   }
+  urlEncode(url: string) {
+    return url.replace(/ /g, "_")
+  }
 }

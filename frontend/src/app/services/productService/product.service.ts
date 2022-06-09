@@ -61,10 +61,10 @@ export class ProductService {
 
     deleteProductFromCart(id: number) {
       this.cart = this.cart.filter(function( obj ) {
-        if (obj.id == id && obj.stock > 1){
-          obj.stock -= 1
-          return obj
-        } 
+        //if (obj.id == id && obj.stock > 1){
+        //  obj.stock -= 1
+        //  return obj
+        //} 
         return obj.id !== id;
     })
     localStorage.setItem("cart", JSON.stringify(this.cart));

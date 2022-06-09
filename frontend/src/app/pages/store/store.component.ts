@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/DBProductService/DBProduct.service';
+import { Observable } from 'rxjs';
 
 import { Product } from 'src/app/product';
 import { ProductService } from 'src/app/services/productService/product.service';
@@ -47,13 +48,14 @@ export class StoreComponent implements OnInit{
     this.userService.deleteProduct(product).subscribe();
   }
 
-  add(product_name: string, cost: string, product_description: string): void{
+  add(product_name: string, cost: string, product_description: string, stockNum:string): void{
     product_name = product_name.trim();
     let price: number = +cost;
     let id:number = 0;
+    let stock:number = +stockNum
     if (!product_name || !price) {return;}
     
-    this.userService.addProduct({ id, product_name, price, product_description } as Product)
+    this.userService.addProduct({ id, product_name, price, product_description, stock } as Product)
     .subscribe(product => {
       this.products.push(product)
     });
@@ -68,6 +70,8 @@ export class StoreComponent implements OnInit{
   addToCart(value: Product): void{
     this.productService.addToCart(value);
   }
+  urlEncode(url: string) {
+    return url.replace(/ /g, "_")
+  }
 
-  
 }
